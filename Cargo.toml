@@ -1,0 +1,24 @@
+[package]
+edition = "2021"
+name = "clip-spy"
+version = "0.0.0"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+# Default enable napi4 feature, see https://nodejs.org/api/n-api.html#node-api-version-matrix
+napi = { version = "2.0.3", default-features = false, features = ["napi4"] }
+napi-derive = "2.0.7"
+clipboard_macos = "0.1.0"
+once_cell = "1.9.0"
+mozjpeg = "0.9.1"
+objc = "0.2.7"
+objc-foundation = "0.1.1"
+objc_id = "0.1.1"
+
+[build-dependencies]
+napi-build = "1.2.1"
+
+[profile.release]
+lto = true
