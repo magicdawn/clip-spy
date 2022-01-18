@@ -28,8 +28,9 @@
   },
   "scripts": {
     "artifacts": "napi artifacts",
-    "build": "rm -rf lib; rm tsconfig.tsbuildinfo; tsc",
-    "build:debug": "napi build --platform --js addon.js --dts addon.d.ts",
+    "build:ts": "rm -rf lib; rm tsconfig.tsbuildinfo; tsc",
+    "build:addon": "napi build --platform --js addon.js --dts addon.d.ts --release",
+    "build:addon:debug": "napi build --platform --js addon.js --dts addon.d.ts",
     "prepublishOnly": "npm run build",
     "version": "napi version",
     "start": "ts-node ./src/index.ts",
