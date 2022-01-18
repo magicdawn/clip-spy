@@ -9,8 +9,6 @@ export class ExternalObject<T> {
     [K: symbol]: T
   }
 }
-export function clipRead(): string
-export function clipWrite(s: string): void
-export function mozjpegTest(width: number, height: number, buf: Buffer): Buffer
-export function test(): Buffer
-export function test2(format: string, data: Buffer): void
+export function clear(): void
+export function get(format: string): Buffer
+export function set(format: string, data: Buffer): boolean

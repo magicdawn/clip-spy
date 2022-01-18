@@ -2,5 +2,8 @@
 
 import addon from '../addon'
 
+console.log(addon.get('public.utf8-plain-text'))
 
-addon.test2('custom', Buffer.from('hello-world'))
+console.log(addon.set('some.custom.type', Buffer.from('Hello World')))
+console.log(addon.get('some.custom.type'))
+

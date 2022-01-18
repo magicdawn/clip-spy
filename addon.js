@@ -221,10 +221,8 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { clipRead, clipWrite, mozjpegTest, test, test2 } = nativeBinding
+const { clear, get, set } = nativeBinding
 
-module.exports.clipRead = clipRead
-module.exports.clipWrite = clipWrite
-module.exports.mozjpegTest = mozjpegTest
-module.exports.test = test
-module.exports.test2 = test2
+module.exports.clear = clear
+module.exports.get = get
+module.exports.set = set
