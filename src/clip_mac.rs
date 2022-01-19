@@ -71,15 +71,21 @@ fn get_clip() -> &'static Clipboard {
   unsafe { CLIP.get_or_init(|| Clipboard::new().unwrap()) }
 }
 
-pub fn clear() {
+#[allow(dead_code)]
+#[napi]
+fn mac_clear() {
   get_clip().clear_contents();
 }
 
-pub fn get(format: String) -> Buffer {
+#[allow(dead_code)]
+#[napi]
+fn mac_get(format: String) -> Buffer {
   let data = get_clip().data_for_type(&format);
   Buffer::from(data)
 }
 
-pub fn set(format: String, data: Buffer) -> bool {
+#[allow(dead_code)]
+#[napi]
+fn mac_set(format: String, data: Buffer) -> bool {
   get_clip().set_data(&format, data.to_vec())
 }
