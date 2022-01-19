@@ -9,6 +9,6 @@ export class ExternalObject<T> {
     [K: symbol]: T
   }
 }
-export function clear(): void
-export function get(format: string): Buffer
-export function set(format: string, data: Buffer): boolean
+export function macClear(): void
+export function macGet(format: string): Buffer
+export function macSet(format: string, data: Buffer): boolean

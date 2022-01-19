@@ -1,10 +1,11 @@
+use napi::bindgen_prelude::Buffer;
 use objc::runtime::{Class, Object};
 use objc_foundation::{INSArray, INSData, INSString};
 use objc_foundation::{NSArray, NSData, NSString};
 use objc_id::Id;
+use once_cell::sync::OnceCell;
 use std::error::Error;
 use std::mem::transmute;
-use std::vec;
 
 // required to bring NSPasteboard into the path of the class-resolver
 #[link(name = "AppKit", kind = "framework")]
@@ -69,7 +70,26 @@ impl Clipboard {
 // this is a convenience function that both cocoa-rs and
 //  glutin define, which seems to depend on the fact that
 //  Option::None has the same representation as a null pointer
+#[allow(dead_code)]
 #[inline]
 pub fn class(name: &str) -> *mut Class {
   unsafe { transmute(Class::get(name)) }
+}
+
+fn get_clip() -> &'static Clipboard {
+  static mut CLIP: OnceCell<Clipboard> = OnceCell::new();
+  unsafe { CLIP.get_or_init(|| Clipboard::new().unwrap()) }
+}
+
+pub fn clear() {
+  get_clip().clear_contents();
+}
+
+pub fn get(format: String) -> Buffer {
+  let data = get_clip().data_for_type(&format);
+  Buffer::from(data)
+}
+
+pub fn set(format: String, data: Buffer) -> bool {
+  get_clip().set_data(&format, data.to_vec())
 }

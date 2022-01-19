@@ -1,34 +1,39 @@
 #![deny(clippy::all)]
-#![allow(dead_code)]
+
+use napi::bindgen_prelude::Buffer;
 
 #[macro_use]
 extern crate napi_derive;
+
+/**
+ * mac only functions
+ */
+
+#[cfg(target_os = "macos")]
 #[macro_use]
 extern crate objc;
 
-use napi::bindgen_prelude::*;
-use once_cell::sync::OnceCell;
+#[cfg(target_os = "macos")]
+mod clip_mac;
 
-mod ns_pasteboard;
-use ns_pasteboard::Clipboard;
-
-fn get_clip() -> &'static Clipboard {
-  static mut CLIP: OnceCell<Clipboard> = OnceCell::new();
-  unsafe { CLIP.get_or_init(|| Clipboard::new().unwrap()) }
+#[napi]
+pub fn mac_clear() {
+  clip_mac::clear()
 }
 
 #[napi]
-fn clear() {
-  get_clip().clear_contents();
+pub fn mac_get(format: String) -> Buffer {
+  clip_mac::get(format)
 }
 
 #[napi]
-fn get(format: String) -> Buffer {
-  let data = get_clip().data_for_type(&format);
-  Buffer::from(data)
+pub fn mac_set(format: String, data: Buffer) -> bool {
+  clip_mac::set(format, data)
 }
 
-#[napi]
-fn set(format: String, data: Buffer) -> bool {
-  get_clip().set_data(&format, data.to_vec())
-}
+/**
+ * windows only functions
+ */
+
+#[cfg(target_os = "windows")]
+mod clip_win;

@@ -221,8 +221,8 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { clear, get, set } = nativeBinding
+const { macClear, macGet, macSet } = nativeBinding
 
-module.exports.clear = clear
-module.exports.get = get
-module.exports.set = set
+module.exports.macClear = macClear
+module.exports.macGet = macGet
+module.exports.macSet = macSet
