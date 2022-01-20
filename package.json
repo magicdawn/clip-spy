@@ -5,8 +5,11 @@
   "types": "lib/index.d.ts",
   "files": [
     "lib",
-    "./addon.d.ts",
-    "./addon.js"
+    "addon.js",
+    "addon.d.ts",
+    "README.md",
+    "CHANGELOG.md",
+    "package.json"
   ],
   "napi": {
     "name": "clip-spy",
