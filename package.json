@@ -47,7 +47,6 @@
     "build:addon:debug": "napi build --platform --js addon.js --dts addon.d.ts",
     "prepublishOnly": "npm run build:ts && ./scripts/opt-dep.ts --add",
     "postpublish": "./scripts/opt-dep.ts --remove",
-    "version": "napi version",
     "start": "ts-node ./src/index.ts",
     "start:debug": "node --inspect-brk -r ts-node/register ./src/index.ts"
   },
