@@ -1,8 +1,13 @@
 {
   "name": "clip-spy",
   "version": "0.0.0",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "./addon.d.ts",
+    "./addon.js"
+  ],
   "napi": {
     "name": "clip-spy",
     "package": {
@@ -21,19 +26,33 @@
     "@swc/core": "^1.2.129",
     "@swc/helpers": "^0.3.2",
     "ts-node": "^10.4.0",
-    "typescript": "^4.5.4"
+    "typescript": "^4.5.4",
+    "husky": "^4",
+    "lint-staged": "^12.2.1",
+    "prettier": "^2.5.1",
+    "@magicdawn/prettier-config": "^0.0.1"
   },
   "engines": {
     "node": ">= 10"
   },
   "scripts": {
     "artifacts": "napi artifacts",
-    "build:ts": "rm -rf lib; rm tsconfig.tsbuildinfo; tsc",
+    "build:ts": "rm -rf lib; rm *.tsbuildinfo; tsc --declaration",
     "build:addon": "napi build --platform --js addon.js --dts addon.d.ts --release",
     "build:addon:debug": "napi build --platform --js addon.js --dts addon.d.ts",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "npm run build:ts && npm run build:addon",
     "version": "napi version",
     "start": "ts-node ./src/index.ts",
     "start:debug": "node --inspect-brk -r ts-node/register ./src/index.ts"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,less,jsx,ts,tsx}": [
+      "prettier --write"
+    ]
   }
 }

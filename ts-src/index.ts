@@ -1,9 +1,14 @@
 #!/usr/bin/env ts-node
 
-import addon from '../addon'
+import {macClear, macGet, macSet} from '../addon'
 
-console.log(addon.macGet('public.utf8-plain-text'))
+// convenient
+// format is the first parameter & required
+export const macGetText = (format: string) => macGet(format).toString('utf8')
+export const macSetText = (format: string, text: string) => macSet(format, Buffer.from(text))
 
-console.log(addon.macSet('some.custom.type', Buffer.from('Hello World')))
-console.log(addon.macGet('some.custom.type'))
+// format
+export const FORMAT_PLAIN_TEXT = 'public.utf8-plain-text'
+export const FORMAT_FILE_URL = 'public.file-url'
 
+export {macClear, macGet, macSet}
