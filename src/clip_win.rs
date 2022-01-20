@@ -5,11 +5,13 @@ pub fn clear() {
   // TODO: impl this
 }
 
-pub fn get(format: String) -> Buffer {
+pub fn get(format: String) -> () {
+  // pub fn get(format: String) -> Buffer {
   // TODO: impl this
 }
 
-pub fn set(format: String, data: Buffer) -> bool {
+pub fn set(format: String, data: Buffer) -> () {
+  // pub fn set(format: String, data: Buffer) -> bool {
   // TODO: impl this
 }
 

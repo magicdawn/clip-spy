@@ -1,7 +1,7 @@
-const { existsSync, readFileSync } = require('fs')
-const { join } = require('path')
+const {existsSync, readFileSync} = require('fs')
+const {join} = require('path')
 
-const { platform, arch } = process
+const {platform, arch} = process
 
 let nativeBinding = null
 let localFileExisted = false
@@ -13,36 +13,49 @@ function isMusl() {
     try {
       return readFileSync('/usr/bin/ldd', 'utf8').includes('musl')
     } catch (e) {
-      return false
+      return true
     }
   } else {
-    const { glibcVersionRuntime } = process.report.getReport().header
-    return !Boolean(glibcVersionRuntime)
+    const {glibcVersionRuntime} = process.report.getReport().header
+    return !glibcVersionRuntime
   }
 }
 
 switch (platform) {
   case 'android':
-    if (arch !== 'arm64') {
-      throw new Error(`Unsupported architecture on Android ${arch}`)
-    }
-    localFileExisted = existsSync(join(__dirname, 'clip-spy.android-arm64.node'))
-    try {
-      if (localFileExisted) {
-        nativeBinding = require('./clip-spy.android-arm64.node')
-      } else {
-        nativeBinding = require('@magicdawn/clip-spy-android-arm64')
-      }
-    } catch (e) {
-      loadError = e
+    switch (arch) {
+      case 'arm64':
+        localFileExisted = existsSync(join(__dirname, 'clip-spy.android-arm64.node'))
+        try {
+          if (localFileExisted) {
+            nativeBinding = require('./clip-spy.android-arm64.node')
+          } else {
+            nativeBinding = require('@magicdawn/clip-spy-android-arm64')
+          }
+        } catch (e) {
+          loadError = e
+        }
+        break
+      case 'arm':
+        localFileExisted = existsSync(join(__dirname, 'clip-spy.android-arm-eabi.node'))
+        try {
+          if (localFileExisted) {
+            nativeBinding = require('./clip-spy.android-arm-eabi.node')
+          } else {
+            nativeBinding = require('@magicdawn/clip-spy-android-arm-eabi')
+          }
+        } catch (e) {
+          loadError = e
+        }
+        break
+      default:
+        throw new Error(`Unsupported architecture on Android ${arch}`)
     }
     break
   case 'win32':
     switch (arch) {
       case 'x64':
-        localFileExisted = existsSync(
-          join(__dirname, 'clip-spy.win32-x64-msvc.node')
-        )
+        localFileExisted = existsSync(join(__dirname, 'clip-spy.win32-x64-msvc.node'))
         try {
           if (localFileExisted) {
             nativeBinding = require('./clip-spy.win32-x64-msvc.node')
@@ -54,9 +67,7 @@ switch (platform) {
         }
         break
       case 'ia32':
-        localFileExisted = existsSync(
-          join(__dirname, 'clip-spy.win32-ia32-msvc.node')
-        )
+        localFileExisted = existsSync(join(__dirname, 'clip-spy.win32-ia32-msvc.node'))
         try {
           if (localFileExisted) {
             nativeBinding = require('./clip-spy.win32-ia32-msvc.node')
@@ -68,9 +79,7 @@ switch (platform) {
         }
         break
       case 'arm64':
-        localFileExisted = existsSync(
-          join(__dirname, 'clip-spy.win32-arm64-msvc.node')
-        )
+        localFileExisted = existsSync(join(__dirname, 'clip-spy.win32-arm64-msvc.node'))
         try {
           if (localFileExisted) {
             nativeBinding = require('./clip-spy.win32-arm64-msvc.node')
@@ -100,9 +109,7 @@ switch (platform) {
         }
         break
       case 'arm64':
-        localFileExisted = existsSync(
-          join(__dirname, 'clip-spy.darwin-arm64.node')
-        )
+        localFileExisted = existsSync(join(__dirname, 'clip-spy.darwin-arm64.node'))
         try {
           if (localFileExisted) {
             nativeBinding = require('./clip-spy.darwin-arm64.node')
@@ -136,9 +143,7 @@ switch (platform) {
     switch (arch) {
       case 'x64':
         if (isMusl()) {
-          localFileExisted = existsSync(
-            join(__dirname, 'clip-spy.linux-x64-musl.node')
-          )
+          localFileExisted = existsSync(join(__dirname, 'clip-spy.linux-x64-musl.node'))
           try {
             if (localFileExisted) {
               nativeBinding = require('./clip-spy.linux-x64-musl.node')
@@ -149,9 +154,7 @@ switch (platform) {
             loadError = e
           }
         } else {
-          localFileExisted = existsSync(
-            join(__dirname, 'clip-spy.linux-x64-gnu.node')
-          )
+          localFileExisted = existsSync(join(__dirname, 'clip-spy.linux-x64-gnu.node'))
           try {
             if (localFileExisted) {
               nativeBinding = require('./clip-spy.linux-x64-gnu.node')
@@ -165,9 +168,7 @@ switch (platform) {
         break
       case 'arm64':
         if (isMusl()) {
-          localFileExisted = existsSync(
-            join(__dirname, 'clip-spy.linux-arm64-musl.node')
-          )
+          localFileExisted = existsSync(join(__dirname, 'clip-spy.linux-arm64-musl.node'))
           try {
             if (localFileExisted) {
               nativeBinding = require('./clip-spy.linux-arm64-musl.node')
@@ -178,9 +179,7 @@ switch (platform) {
             loadError = e
           }
         } else {
-          localFileExisted = existsSync(
-            join(__dirname, 'clip-spy.linux-arm64-gnu.node')
-          )
+          localFileExisted = existsSync(join(__dirname, 'clip-spy.linux-arm64-gnu.node'))
           try {
             if (localFileExisted) {
               nativeBinding = require('./clip-spy.linux-arm64-gnu.node')
@@ -193,9 +192,7 @@ switch (platform) {
         }
         break
       case 'arm':
-        localFileExisted = existsSync(
-          join(__dirname, 'clip-spy.linux-arm-gnueabihf.node')
-        )
+        localFileExisted = existsSync(join(__dirname, 'clip-spy.linux-arm-gnueabihf.node'))
         try {
           if (localFileExisted) {
             nativeBinding = require('./clip-spy.linux-arm-gnueabihf.node')
@@ -221,7 +218,7 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { macClear, macGet, macSet } = nativeBinding
+const {macClear, macGet, macSet} = nativeBinding
 
 module.exports.macClear = macClear
 module.exports.macGet = macGet

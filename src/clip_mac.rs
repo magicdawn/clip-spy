@@ -1,3 +1,4 @@
+#[cfg(target_os = "macos")]
 use napi::bindgen_prelude::Buffer;
 use objc::runtime::Object;
 use objc_foundation::{INSArray, INSData, INSString};

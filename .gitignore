@@ -15,4 +15,5 @@ coverage.*
 
 # .node
 /*.node
+/npm/**/*.node
 /target
