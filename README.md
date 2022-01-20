@@ -1,3 +1,3 @@
 # Clip-Spy
 
-clipboard api for Node.js & Electron via rust bindings.
+clipboard api for Node.js & Electron via rust napi bindings.

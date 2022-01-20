@@ -12,7 +12,7 @@ function add() {
   const pkg = fse.readJsonSync(pkgJsonFile)
 
   const moreOptDeps = {}
-  const dirs = [__dirname + '../npm/darwin-arm64/', __dirname + '../npm/darwin-x64/']
+  const dirs = [__dirname + '/../npm/darwin-arm64/', __dirname + '/../npm/darwin-x64/']
   for (let d of dirs) {
     const pkgJsonFile = path.join(d, 'package.json')
     const pkg = require(pkgJsonFile)
